@@ -1,0 +1,140 @@
+:root {
+  --container-width: 400px;
+  --container-height: 50px;
+  --container-border-color: lightgray;
+  --container-border-radius: 22px;
+  --container-box-shadow: 0.7px 1.4px 1.4px hsl(0deg 0% 0% / 0.48);
+  --gradient-width: 50px;
+  --triangle-size: 20px;
+  --triangle-color: lightgray;
+  --scale-item-width: 16px;
+  --scale-item-font-size: 22px;
+  --scale-item-indicator-color: #00000031;
+  --scale-item-main-indicator-color: #00000084;
+}
+
+.scroll-container-root {
+  position: relative;
+}
+
+.scroll-container {
+  width: var(--container-width);
+  height: var(--container-height);
+  border: 1px solid var(--container-border-color);
+  border-radius: var(--container-border-radius);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  box-shadow: inset var(--container-box-shadow);
+}
+
+.scroll-container::before,
+.scroll-container::after {
+  content: "";
+  position: absolute;
+  width: var(--gradient-width);
+  height: 100%;
+  z-index: 1;
+}
+
+.scroll-container::before {
+  left: 0;
+  background: linear-gradient(to right, white 0%, white 10%, transparent 100%);
+}
+
+.scroll-container::after {
+  right: 0;
+  background: linear-gradient(to left, white 0%, white 10%, transparent 100%);
+}
+
+.pointer {
+  height: var(--triangle-size);
+  width: var(--triangle-size);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background-color: var(--triangle-color);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.triangle {
+  height: var(--triangle-size);
+  width: var(--triangle-size);
+  background: var(--triangle-color);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  text-align: left;
+}
+
+.triangle:before,
+.triangle:after {
+  content: "";
+  position: absolute;
+  background-color: inherit;
+}
+
+.triangle,
+.triangle:before,
+.triangle:after {
+  height: 10px;
+  width: 10px;
+  border-top-right-radius: 30%;
+}
+
+.triangle {
+  transform: rotate(-360deg) skewX(-30deg) scale(1, 0.866);
+}
+
+.triangle:before {
+  transform: rotate(-135deg) skewX(-45deg) scale(1.414, 0.707)
+    translate(0, -50%);
+}
+
+.triangle:after {
+  transform: rotate(135deg) skewY(-45deg) scale(0.707, 1.414) translate(50%);
+}
+
+.scroll {
+  height: fit-content;
+  display: grid;
+  place-items: center;
+}
+
+.scale {
+  display: flex;
+  position: relative;
+}
+
+.scale-item {
+  width: var(--scale-item-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  user-select: none;
+  position: relative;
+  font-size: var(--scale-item-font-size);
+}
+
+.scale-item::after {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  background-color: var(--scale-item-indicator-color);
+  bottom: -110%;
+}
+
+.scale-item.main-value::after {
+  width: 2px;
+  background-color: var(--scale-item-main-indicator-color);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -100%;
+  border-radius: 10px;
+}

@@ -8,7 +8,7 @@
   --triangle-size: 20px;
   --triangle-color: lightgray;
   --scale-item-width: 16px;
-  --scale-item-font-size: 22px;
+  --scale-item-font-size: 1.2rem;
   --scale-item-indicator-color: #00000031;
   --scale-item-main-indicator-color: #00000084;
 }
@@ -28,6 +28,10 @@
   overflow: hidden;
   cursor: grab;
   box-shadow: inset var(--container-box-shadow);
+
+  @media (max-width: 400px) {
+    width: 80vw;
+  }
 }
 
 .scroll-container::before,

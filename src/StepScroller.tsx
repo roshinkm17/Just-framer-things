@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import "./StepScroller.css";
 import { useAnimate, motion } from "framer-motion";
 
 const N = 20;
+
 /**
  * Represents an array of items.
  * Each item is a string representation of a number from 1 to N.
@@ -16,7 +18,7 @@ const items = Array.from({ length: N }, (_, i) => (i + 1).toString()).flatMap(
  * StepScroller component.
  *
  * This component provides a scrollable container with a draggable inner element.
- * It uses the `useAnimate` hook to animate the inner element's position based on mouse movement.
+ * It uses the `useAnimate` hook to animate the inner element's position based on mouse and touch movement.
  *
  * @returns The StepScroller component.
  */
@@ -24,8 +26,13 @@ const StepScroller = () => {
   const [scope, animate] = useAnimate();
   const [currentX, setCurrentX] = useState(0);
 
-  const handleMouseMove = (event: MouseEvent) =>
-    setCurrentX((prev) => prev + event.movementX);
+  const handleMouseMove = (event: MouseEvent | TouchEvent) => {
+    const movementX =
+      event instanceof MouseEvent
+        ? event.movementX
+        : event.touches[0].clientX - event.touches[0].pageX;
+    setCurrentX((prev) => prev + movementX);
+  };
 
   const addMouseListeners = (element: HTMLElement) => {
     const handleMouseUp = () => {
@@ -38,8 +45,19 @@ const StepScroller = () => {
       document.addEventListener("mouseup", handleMouseUp);
     };
 
+    const handleTouchEnd = () => {
+      element.removeEventListener("touchmove", handleMouseMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+
+    const handleTouchStart = (event: TouchEvent) => {
+      element.addEventListener("touchmove", handleMouseMove);
+      document.addEventListener("touchend", handleTouchEnd);
+      event.preventDefault();
+    };
+
     element.addEventListener("mousedown", handleMouseDown);
-    element.addEventListener("scroll", handleMouseDown);
+    element.addEventListener("touchstart", handleTouchStart);
   };
 
   useEffect(() => {
@@ -69,7 +87,6 @@ const StepScroller = () => {
       ".scroll-container"
     ) as HTMLElement;
     addMouseListeners(scrollContainer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,0 +1,67 @@
+.sr-only {
+  position: absolute;
+  width: 10px;
+  height: 100%;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 1px solid white;
+}
+
+/*
+ * To get the radius or the hypotenuse.
+ * If you know the inner angle and the length of the side
+ * The end / Math.sin(innerAngle) should provide the radius
+*/
+
+.text-ring {
+  --inner-angle: calc((360 / var(--char-count)) * 1deg);
+  --character-width: 1;
+  text-transform: uppercase;
+  font-size: calc(var(--font-size, 1) * 6vmin);
+  position: relative;
+  box-shadow: none;
+  top: 320px;
+  cursor: default;
+  /* make text non selectable */
+  user-select: none;
+}
+
+.char {
+  display: inline-block;
+  position: absolute;
+  font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--inner-angle) * var(--char-index)))
+    translateY(var(--radius));
+}
+
+/* Window */
+.clip-window {
+  border: 1px solid var(--container-border-color);
+  height: 300px;
+  width: 300px;
+  border-radius: 38px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 3rem;
+  margin-inline: auto;
+  box-shadow: inset var(--container-box-shadow);
+}
+
+.clip-window::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 30%;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: lightgray;
+  z-index: 1;
+  border-radius: 10px 10px 0 0;
+}
